@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Timer 💕⏱️</title>
-</head>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pink Timer 💕⏱️</title>
+  <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: "Inter", sans-serif;
     }
+
     body {
-        background-color: pink;
+      background-color: pink;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     .timer-container {
-        background-color: white;
-        border-radius: 15px;
-        padding: 20px;  
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 300px;
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+      border: 2px solid #ffc0cb;
     }
- h1 {
+
+    h1 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
@@ -47,7 +54,7 @@
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.2s, opacity 0.2s, background-color 0.3s;
     }
 
     button:hover {
@@ -56,7 +63,7 @@
     }
 
     .start {
-      background-color: pink
+      background-color: pink;
       color: white;
     }
 
@@ -67,7 +74,7 @@
 
     .reset {
       background-color: papayawhip;
-      color: white;
+      color: black;
     }
 
     footer {
@@ -75,9 +82,66 @@
       font-size: 0.9rem;
       opacity: 0.8;
     }
-    
-</style>
+  </style>
+</head>
 <body>
-    
+  <div class="timer-container">
+    <h1>Timer</h1>
+    <div id="display">00:00:00</div>
+
+    <div class="buttons">
+      <button class="start" id="startBtn">Start</button>
+      <button class="pause" id="pauseBtn">Pause</button>
+      <button class="reset" id="resetBtn">Reset</button>
+    </div>
+
+    <footer>⏱️ Simple JS Timer</footer>
+  </div>
+
+  <script>
+    let startTime = 0;
+    let elapsedTime = 0;
+    let timerInterval;
+
+    const display = document.getElementById("display");
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      return (
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0")
+      );
+    }
+
+    function updateTimer() {
+      const currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      display.textContent = formatTime(elapsedTime);
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      if (!timerInterval) {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+    });
+
+    document.getElementById("pauseBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      elapsedTime = 0;
+      display.textContent = "00:00:00";
+    });
+  </script>
 </body>
 </html>
